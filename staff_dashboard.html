@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Staff Dashboard{% endblock %}
+{% block content %}
+<h1 class="section-title">Staff Dashboard</h1>
+<p class="sh-subtitle mb-4">Overview of all patients and assessments across the system.</p>
+
+<div class="sh-welcome-banner">
+    <h3>Welcome back, {{ session.get('name') }} 👋</h3>
+    <p>Monitor patient assessments, review risk trends, and keep track of registered patients from here.</p>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-4">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#0f766e;"><i class="fa-solid fa-users"></i></div>
+            <div><div class="stat-value">{{ total_patients }}</div><div class="stat-label">Total Patients</div></div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#2563eb;"><i class="fa-solid fa-clipboard-list"></i></div>
+            <div><div class="stat-value">{{ total_assessments }}</div><div class="stat-label">Total Assessments</div></div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <a href="{{ url_for('patients') }}" class="text-decoration-none">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#7c3aed;"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <div><div class="stat-value" style="font-size:1.1rem;">Browse Patients</div><div class="stat-label">View full list</div></div>
+        </div>
+        </a>
+    </div>
+</div>
+
+<div class="card card-app">
+    <div class="card-header">Recent Assessments (All Patients)</div>
+    <div class="card-body p-0">
+        {% if recent_assessments %}
+        <div class="table-responsive">
+            <table class="table table-app align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Disease</th>
+                        <th>Probability</th>
+                        <th>Risk Level</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in recent_assessments %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('patient_view', user_id=a.user_id) }}">{{ a.patient_name }}</a>
+                        </td>
+                        <td>{{ a.disease }}</td>
+                        <td>{{ a.probability }}%</td>
+                        <td><span class="risk-pill {{ 'low-risk' if a.risk_level == 'Low Risk' else 'moderate-risk' if a.risk_level == 'Moderate Risk' else 'high-risk' }}">{{ a.risk_level }}</span></td>
+                        <td>{{ a.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state"><i class="fa-solid fa-clipboard-list"></i><p class="mb-0">No assessments recorded yet.</p></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

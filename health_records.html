@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Health Records{% endblock %}
+{% block content %}
+<h1 class="section-title">My Health Records</h1>
+<p class="text-muted mb-4">Keep your baseline health details up to date</p>
+
+<div class="card card-app" style="max-width: 720px;">
+    <div class="card-body">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Blood Group</label>
+                    <select name="blood_group" class="form-select">
+                        <option value="">Select</option>
+                        {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
+                        <option {{ 'selected' if record and record.blood_group == bg else '' }}>{{ bg }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Height (cm)</label>
+                    <input type="number" step="0.1" name="height" class="form-control" value="{{ record.height if record and record.height else '' }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Weight (kg)</label>
+                    <input type="number" step="0.1" name="weight" class="form-control" value="{{ record.weight if record and record.weight else '' }}">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Allergies</label>
+                    <textarea name="allergies" class="form-control" rows="2" placeholder="e.g. Penicillin, Peanuts">{{ record.allergies if record else '' }}</textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Medical History</label>
+                    <textarea name="medical_history" class="form-control" rows="2" placeholder="Past conditions, surgeries, etc.">{{ record.medical_history if record else '' }}</textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Current Medications</label>
+                    <textarea name="medications" class="form-control" rows="2">{{ record.medications if record else '' }}</textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Emergency Contact</label>
+                    <input type="text" name="emergency_contact" class="form-control" value="{{ record.emergency_contact if record else '' }}" placeholder="Name and phone number">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-sh mt-4 px-4">Save Records</button>
+        </form>
+        {% if record and record.updated_at %}
+        <p class="text-muted small mt-3 mb-0">Last updated: {{ record.updated_at }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

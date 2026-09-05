@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Model Info{% endblock %}
+{% block content %}
+<h1 class="section-title">ML Model Information</h1>
+<p class="text-muted mb-4">Status of the underlying prediction models</p>
+
+<div class="row g-3" style="max-width: 800px;">
+    <div class="col-md-6">
+        <div class="card card-app h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="mb-0"><i class="fa-solid fa-heart-pulse text-danger me-2"></i>Heart Disease Model</h5>
+                    {% if heart_available %}
+                    <span class="risk-pill low-risk">Loaded</span>
+                    {% else %}
+                    <span class="risk-pill high-risk">Not Found</span>
+                    {% endif %}
+                </div>
+                <ul class="list-unstyled text-muted small mb-0">
+                    <li class="mb-1"><strong>Algorithm:</strong> Random Forest Classifier</li>
+                    <li class="mb-1"><strong>Trained on:</strong> UCI Heart Disease dataset</li>
+                    <li class="mb-1"><strong>Features:</strong> 13 clinical attributes</li>
+                    <li><strong>File:</strong> models/heart_model.pkl</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-app h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="mb-0"><i class="fa-solid fa-droplet text-primary me-2"></i>Diabetes Model</h5>
+                    {% if diabetes_available %}
+                    <span class="risk-pill low-risk">Loaded</span>
+                    {% else %}
+                    <span class="risk-pill high-risk">Not Found</span>
+                    {% endif %}
+                </div>
+                <ul class="list-unstyled text-muted small mb-0">
+                    <li class="mb-1"><strong>Algorithm:</strong> Random Forest Classifier</li>
+                    <li class="mb-1"><strong>Trained on:</strong> Pima Indians Diabetes dataset</li>
+                    <li class="mb-1"><strong>Features:</strong> 8 health attributes</li>
+                    <li><strong>File:</strong> models/diabetes_model.pkl</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info mt-3" style="max-width: 800px;">
+    <i class="fa-solid fa-circle-info me-2"></i>
+    Both models are Random Forest classifiers trained with scikit-learn. Retrain them anytime by running
+    <code>train_heart_model.py</code> or <code>train_diabetes_model.py</code> after updating the datasets.
+</div>
+{% endblock %}

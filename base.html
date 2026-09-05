@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SmartHealth{% endblock %} | Smart Health Risk Predictor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+{% if session.get('user_id') %}
+<aside class="sh-sidebar">
+    <div class="sh-logo"><span class="smart">Smart</span><span class="health">Health</span></div>
+
+    {% if session.get('role') == 'staff' %}
+        <div class="sh-nav-label">Staff</div>
+        <ul class="sh-nav">
+            <li class="sh-nav-item"><a href="{{ url_for('staff_dashboard') }}" class="{{ 'active' if request.endpoint == 'staff_dashboard' }}"><span class="icon">🏠</span>Dashboard</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('patients') }}" class="{{ 'active' if request.endpoint in ['patients','patient_view'] }}"><span class="icon">🧑‍🤝‍🧑</span>Patients</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('model_info') }}" class="{{ 'active' if request.endpoint == 'model_info' }}"><span class="icon">⚙️</span>Model Info</a></li>
+        </ul>
+    {% else %}
+        <div class="sh-nav-label">Patient</div>
+        <ul class="sh-nav">
+            <li class="sh-nav-item"><a href="{{ url_for('patient_dashboard') }}" class="{{ 'active' if request.endpoint == 'patient_dashboard' }}"><span class="icon">🏠</span>Dashboard</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('heart') }}" class="{{ 'active' if request.endpoint in ['heart','predict_heart'] }}"><span class="icon">❤️</span>Heart Assessment</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('diabetes') }}" class="{{ 'active' if request.endpoint in ['diabetes','predict_diabetes'] }}"><span class="icon">🩸</span>Diabetes Assessment</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('health_records') }}" class="{{ 'active' if request.endpoint == 'health_records' }}"><span class="icon">🏥</span>Health Records</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('assessment_history') }}" class="{{ 'active' if request.endpoint == 'assessment_history' }}"><span class="icon">📋</span>Assessment History</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('reports') }}" class="{{ 'active' if request.endpoint == 'reports' }}"><span class="icon">📄</span>My Reports</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('analytics') }}" class="{{ 'active' if request.endpoint == 'analytics' }}"><span class="icon">📊</span>Analytics</a></li>
+            <li class="sh-nav-item"><a href="{{ url_for('patient_profile') }}" class="{{ 'active' if request.endpoint == 'patient_profile' }}"><span class="icon">👤</span>My Profile</a></li>
+        </ul>
+    {% endif %}
+
+    <div class="sh-sidebar-spacer"></div>
+
+    <ul class="sh-nav mb-0">
+        <li class="sh-nav-item logout"><a href="{{ url_for('logout') }}"><span class="icon">🚪</span>Logout</a></li>
+    </ul>
+</aside>
+{% endif %}
+
+<main class="{% if session.get('user_id') %}sh-main{% else %}{% endif %}">
+    {% if session.get('user_id') %}
+    <div class="sh-topbar" style="justify-content: flex-end;">
+        <div class="sh-user-badge">
+            <div class="name">{{ session.get('name') }}</div>
+            <div class="role">{{ session.get('role')|capitalize }} Account</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="{% if not session.get('user_id') %}container-fluid px-4 py-4{% endif %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% set alert_class = 'danger' if category == 'error' else category %}
+                    <div class="alert alert-{{ alert_class }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

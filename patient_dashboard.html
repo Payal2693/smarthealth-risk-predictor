@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1 class="section-title">Patient Dashboard</h1>
+<p class="sh-subtitle mb-4">Monitor your health assessments and manage your health information.</p>
+
+<div class="sh-welcome-banner">
+    <h3>Welcome back, {{ session.get('name') }} 👋</h3>
+    <p>Use SmartHealth to complete health risk assessments, maintain your health records, and review your previous assessment results.</p>
+</div>
+
+<h4 class="fw-800" style="font-weight:800; color:var(--sh-navy); margin-bottom:16px;">Quick Actions</h4>
+<div class="sh-quick-grid">
+    <a href="{{ url_for('heart') }}" class="sh-quick-card">
+        <span class="emoji">❤️</span>
+        <h5>Heart Assessment</h5>
+        <p>Check your estimated heart disease risk using health information.</p>
+    </a>
+    <a href="{{ url_for('diabetes') }}" class="sh-quick-card">
+        <span class="emoji">🩸</span>
+        <h5>Diabetes Assessment</h5>
+        <p>Complete a diabetes risk assessment using your health details.</p>
+    </a>
+    <a href="{{ url_for('health_records') }}" class="sh-quick-card">
+        <span class="emoji">🏥</span>
+        <h5>Health Records</h5>
+        <p>Update and manage your personal health information.</p>
+    </a>
+</div>
+
+<h4 style="font-weight:800; color:var(--sh-navy); margin-bottom:16px;">Recent Assessments</h4>
+<div class="card card-app">
+    <div class="card-body p-0">
+        {% if assessments %}
+        <div class="table-responsive">
+            <table class="table table-app align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Probability</th>
+                        <th>Risk Level</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in assessments %}
+                    <tr>
+                        <td>{{ a.disease }}</td>
+                        <td>{{ a.probability }}%</td>
+                        <td><span class="risk-pill {{ 'low-risk' if a.risk_level == 'Low Risk' else 'moderate-risk' if a.risk_level == 'Moderate Risk' else 'high-risk' }}">{{ a.risk_level }}</span></td>
+                        <td>{{ a.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <p class="mb-3">No assessments yet.</p>
+            <a href="{{ url_for('heart') }}" class="btn btn-sh btn-sm me-2">Try Heart Check</a>
+            <a href="{{ url_for('diabetes') }}" class="btn btn-outline-secondary btn-sm">Try Diabetes Check</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

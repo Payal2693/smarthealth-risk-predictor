@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}My Reports{% endblock %}
+{% block content %}
+<h1 class="section-title">My Reports</h1>
+<p class="text-muted mb-4">Detailed breakdown of every assessment you've run</p>
+
+{% if reports %}
+<div class="row g-3">
+    {% for r in reports %}
+    <div class="col-lg-6">
+        <div class="card card-app h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>
+                    {% if r.disease == 'Heart Disease' %}
+                    <i class="fa-solid fa-heart-pulse text-danger me-2"></i>
+                    {% else %}
+                    <i class="fa-solid fa-droplet text-primary me-2"></i>
+                    {% endif %}
+                    {{ r.disease }}
+                </span>
+                <span class="risk-pill {{ 'low-risk' if r.risk_level == 'Low Risk' else 'moderate-risk' if r.risk_level == 'Moderate Risk' else 'high-risk' }}">{{ r.risk_level }} &middot; {{ r.probability }}%</span>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small mb-3">{{ r.created_at }}</p>
+                <div class="row row-cols-2 g-2 small">
+                    {% for key, value in (r.input_data|fromjson).items() %}
+                    <div class="col">
+                        <span class="text-muted">{{ key|replace('_',' ')|title }}:</span>
+                        <span class="fw-semibold">{{ value }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card card-app">
+    <div class="empty-state"><i class="fa-solid fa-file-medical"></i><p class="mb-0">No reports yet. Run an assessment to see it here.</p></div>
+</div>
+{% endif %}
+{% endblock %}

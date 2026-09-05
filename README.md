@@ -1,0 +1,109 @@
+# SmartHealth Risk Predictor
+
+An online health data management system that lets patients run ML-based risk
+screenings for **heart disease** and **diabetes**, track their assessment
+history, maintain health records, and lets staff/doctor accounts monitor all
+registered patients.
+
+## Tech Stack
+- **Backend:** Flask (Python), raw `sqlite3` (no ORM)
+- **ML:** scikit-learn `RandomForestClassifier`, trained on the UCI Heart
+  Disease dataset and the Pima Indians Diabetes dataset
+- **Frontend:** Jinja2 templates, Bootstrap 5, Chart.js
+- **Auth:** Flask sessions + Werkzeug password hashing
+
+## Project Structure
+```
+smarthealth/
+├── app.py                     # Main Flask application (all routes)
+├── requirements.txt
+├── smarthealth.db             # SQLite database (auto-created if missing)
+├── check_data.py              # Quick script to inspect dataset columns
+├── train_heart_model.py       # Trains models/heart_model.pkl
+├── train_diabetes_model.py    # Trains models/diabetes_model.pkl
+├── datasets/
+│   ├── heart-disease.csv
+│   └── diabetes.csv
+├── models/
+│   ├── heart_model.pkl        # Pre-trained, ready to use
+│   └── diabetes_model.pkl     # Pre-trained, ready to use
+├── templates/                 # All HTML pages
+└── static/
+    ├── css/style.css
+    └── js/app.js
+```
+
+## Setup & Run
+
+1. **Create a virtual environment** (recommended)
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate        # Windows
+   source venv/bin/activate     # macOS/Linux
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the app**
+   ```bash
+   python app.py
+   ```
+   The database tables are created automatically on startup if they don't
+   already exist, and both `.pkl` models are already trained and included,
+   so this step alone gets you a fully working app.
+
+4. Open **http://127.0.0.1:5000** in your browser.
+
+## Login Credentials
+
+Your existing database already has these accounts (passwords are whatever
+you originally set — I did not change or reset them):
+
+| Name | Email | Role |
+|---|---|---|
+| abc | abc@gmail.com | staff |
+| Payal Gahandule | gahandulepayal2693@gmail.com | patient |
+| Pooja | pooja123@gmail.com | patient |
+| Patient1 | patient1@gmail.com | patient |
+
+If you don't remember a password, just register a new account from the
+Register page — you can create either a **Patient** or **Staff** account.
+
+## Retraining the Models
+
+If you want to retrain on updated data, replace the CSVs in `datasets/` and
+run:
+```bash
+python train_heart_model.py
+python train_diabetes_model.py
+```
+Both scripts read from `datasets/` and write to `models/` — no other code
+needs to change. Current accuracy on your real datasets:
+- **Heart Disease model:** ~84% accuracy (303 records)
+- **Diabetes model:** ~78% accuracy (768 records)
+
+## What Was Added / Fixed
+
+Your uploaded files (`app.py`, `smarthealth.db`, training scripts) already
+contained the full backend logic. What was missing to make it a runnable
+project:
+- All 15 HTML templates (`login.html`, `register.html`, `heart.html`,
+  `diabetes.html`, `result.html`, dashboards, etc.) — built to match the
+  exact variables each route passes in
+- `static/css/style.css` and `static/js/app.js` for a clean, non-default look
+- Trained `models/heart_model.pkl` and `models/diabetes_model.pkl`
+- Added a `fromjson` Jinja filter in `app.py` so the Reports page can display
+  the JSON snapshot stored in `assessments.input_data`
+- Added the missing `pandas` dependency to `requirements.txt`
+
+No other logic in `app.py` was changed — all your routes, database schema,
+and prediction logic are exactly as you wrote them.
+
+## Notes
+- `app.run(debug=True)` is fine for development/demo/viva purposes, but turn
+  `debug=False` off before deploying this anywhere public.
+- The secret key in `app.py` is a hardcoded placeholder — change it before
+  any real deployment.

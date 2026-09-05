@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Assessment History{% endblock %}
+{% block content %}
+<h1 class="section-title">Assessment History</h1>
+<p class="text-muted mb-4">All your past risk assessments</p>
+
+<div class="card card-app">
+    <div class="card-body p-0">
+        {% if assessments %}
+        <div class="table-responsive">
+            <table class="table table-app align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Probability</th>
+                        <th>Risk Level</th>
+                        <th>Date &amp; Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in assessments %}
+                    <tr>
+                        <td>
+                            {% if a.disease == 'Heart Disease' %}
+                            <i class="fa-solid fa-heart-pulse text-danger me-1"></i>
+                            {% else %}
+                            <i class="fa-solid fa-droplet text-primary me-1"></i>
+                            {% endif %}
+                            {{ a.disease }}
+                        </td>
+                        <td>{{ a.probability }}%</td>
+                        <td><span class="risk-pill {{ 'low-risk' if a.risk_level == 'Low Risk' else 'moderate-risk' if a.risk_level == 'Moderate Risk' else 'high-risk' }}">{{ a.risk_level }}</span></td>
+                        <td>{{ a.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i><p class="mb-0">No assessment history yet.</p></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

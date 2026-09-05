@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ patient.name }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('patients') }}" class="text-decoration-none"><i class="fa-solid fa-arrow-left me-1"></i>Back to Patients</a>
+
+<div class="d-flex align-items-center gap-3 my-4">
+    <div class="avatar-circle" style="width:64px;height:64px;font-size:1.4rem;">{{ patient.name[0]|upper }}</div>
+    <div>
+        <h4 class="mb-0">{{ patient.name }}</h4>
+        <p class="text-muted mb-0">{{ patient.email }} &middot; {{ patient.phone or 'No phone on file' }}</p>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-3"><strong>Age:</strong> {{ patient.age or '-' }}</div>
+    <div class="col-md-3"><strong>Gender:</strong> {{ patient.gender or '-' }}</div>
+    {% if health_record %}
+    <div class="col-md-3"><strong>Blood Group:</strong> {{ health_record.blood_group or '-' }}</div>
+    <div class="col-md-3"><strong>BMI Basis:</strong> {{ health_record.height or '-' }} cm / {{ health_record.weight or '-' }} kg</div>
+    {% endif %}
+</div>
+
+{% if health_record and (health_record.allergies or health_record.medical_history or health_record.medications) %}
+<div class="card card-app mb-3">
+    <div class="card-header">Health Record Notes</div>
+    <div class="card-body">
+        {% if health_record.allergies %}<p class="mb-2"><strong>Allergies:</strong> {{ health_record.allergies }}</p>{% endif %}
+        {% if health_record.medical_history %}<p class="mb-2"><strong>Medical History:</strong> {{ health_record.medical_history }}</p>{% endif %}
+        {% if health_record.medications %}<p class="mb-0"><strong>Medications:</strong> {{ health_record.medications }}</p>{% endif %}
+    </div>
+</div>
+{% endif %}
+
+<div class="card card-app">
+    <div class="card-header">Assessment History</div>
+    <div class="card-body p-0">
+        {% if assessments %}
+        <div class="table-responsive">
+            <table class="table table-app align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Probability</th>
+                        <th>Risk Level</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in assessments %}
+                    <tr>
+                        <td>{{ a.disease }}</td>
+                        <td>{{ a.probability }}%</td>
+                        <td><span class="risk-pill {{ 'low-risk' if a.risk_level == 'Low Risk' else 'moderate-risk' if a.risk_level == 'Moderate Risk' else 'high-risk' }}">{{ a.risk_level }}</span></td>
+                        <td>{{ a.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state"><i class="fa-solid fa-clipboard-list"></i><p class="mb-0">No assessments for this patient yet.</p></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

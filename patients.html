@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Patients{% endblock %}
+{% block content %}
+<h1 class="section-title">Patients</h1>
+<p class="text-muted mb-4">All registered patients</p>
+
+<div class="card card-app">
+    <div class="card-body p-0">
+        {% if patients %}
+        <div class="table-responsive">
+            <table class="table table-app align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in patients %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="avatar-circle">{{ p.name[0]|upper }}</div>
+                                <div class="fw-semibold">{{ p.name }}</div>
+                            </div>
+                        </td>
+                        <td>{{ p.email }}<br><small class="text-muted">{{ p.phone or '-' }}</small></td>
+                        <td>{{ p.age or '-' }}</td>
+                        <td>{{ p.gender or '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('patient_view', user_id=p.id) }}" class="btn btn-sm btn-outline-secondary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state"><i class="fa-solid fa-users"></i><p class="mb-0">No patients registered yet.</p></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

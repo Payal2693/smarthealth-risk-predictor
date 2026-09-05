@@ -59,8 +59,7 @@ smarthealth/
 
 ## Login Credentials
 
-Your existing database already has these accounts (passwords are whatever
-you originally set — I did not change or reset them):
+These names were created just for demo purpose
 
 | Name | Email | Role |
 |---|---|---|
@@ -68,8 +67,6 @@ you originally set — I did not change or reset them):
 | Pooja | pooja123@gmail.com | patient |
 | Patient1 | patient1@gmail.com | patient |
 
-If you don't remember a password, just register a new account from the
-Register page — you can create either a **Patient** or **Staff** account.
 
 ## Retraining the Models
 

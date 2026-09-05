@@ -81,22 +81,6 @@ needs to change. Current accuracy on your real datasets:
 - **Heart Disease model:** ~84% accuracy (303 records)
 - **Diabetes model:** ~78% accuracy (768 records)
 
-## What Was Added / Fixed
-
-Your uploaded files (`app.py`, `smarthealth.db`, training scripts) already
-contained the full backend logic. What was missing to make it a runnable
-project:
-- All 15 HTML templates (`login.html`, `register.html`, `heart.html`,
-  `diabetes.html`, `result.html`, dashboards, etc.) — built to match the
-  exact variables each route passes in
-- `static/css/style.css` and `static/js/app.js` for a clean, non-default look
-- Trained `models/heart_model.pkl` and `models/diabetes_model.pkl`
-- Added a `fromjson` Jinja filter in `app.py` so the Reports page can display
-  the JSON snapshot stored in `assessments.input_data`
-- Added the missing `pandas` dependency to `requirements.txt`
-
-No other logic in `app.py` was changed — all your routes, database schema,
-and prediction logic are exactly as you wrote them.
 
 ## Notes
 - `app.run(debug=True)` is fine for development/demo/viva purposes, but turn

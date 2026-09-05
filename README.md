@@ -68,22 +68,5 @@ These names were created just for demo purpose
 | Patient1 | patient1@gmail.com | patient |
 
 
-## Retraining the Models
-
-If you want to retrain on updated data, replace the CSVs in `datasets/` and
-run:
-```bash
-python train_heart_model.py
-python train_diabetes_model.py
-```
-Both scripts read from `datasets/` and write to `models/` — no other code
-needs to change. Current accuracy on your real datasets:
-- **Heart Disease model:** ~84% accuracy (303 records)
-- **Diabetes model:** ~78% accuracy (768 records)
 
 
-## Notes
-- `app.run(debug=True)` is fine for development/demo/viva purposes, but turn
-  `debug=False` off before deploying this anywhere public.
-- The secret key in `app.py` is a hardcoded placeholder — change it before
-  any real deployment.

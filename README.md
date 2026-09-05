@@ -65,7 +65,6 @@ you originally set — I did not change or reset them):
 | Name | Email | Role |
 |---|---|---|
 | abc | abc@gmail.com | staff |
-| Payal Gahandule | gahandulepayal2693@gmail.com | patient |
 | Pooja | pooja123@gmail.com | patient |
 | Patient1 | patient1@gmail.com | patient |
 

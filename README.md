@@ -122,7 +122,7 @@ http://127.0.0.1:5000
 Login Credentials
 
 The following accounts were created for demonstration purposes only.
-```text
+
 Name	         Email	                      Role
 abc	         abc@gmail.com	             Staff
 Pooja	         pooja123@gmail.com	       Patient
